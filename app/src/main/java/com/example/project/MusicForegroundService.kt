@@ -41,6 +41,7 @@ class MusicForegroundService : AppCompatActivity() {
         mLocalBroadcastManager= LocalBroadcastManager.getInstance(this)
         mLocalBroadcastManager?.registerReceiver(broadcastReceiver,intentFilter!!)
         btnStartService.setOnClickListener {
+
             val serviceIntent = Intent(this, MyService::class.java)
             startService(serviceIntent)
 
@@ -51,12 +52,14 @@ class MusicForegroundService : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        registerReceiver(broadcastReceiver,intentFilter)
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,  IntentFilter("custom-action-local-broadcast"));
+        //registerReceiver(broadcastReceiver,intentFilter)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(broadcastReceiver)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
+        //unregisterReceiver(broadcastReceiver)
     }
 
     private fun createNotificationChannel() {
@@ -74,14 +77,14 @@ class MusicForegroundService : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed(
             Runnable {
                 stopService(Intent(baseContext, MyService::class.java))
-                registerReceiver(broadcastReceiver,intentFilter)
+                //registerReceiver(broadcastReceiver,intentFilter)
             }, 10000
         )
     }
 
     private var broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if(intent?.action.equals(mBroadcastStringAction)){
+            if(intent?.action.equals("custom-action-local-broadcast")){
 
                  servicemsg.text=intent?.getStringExtra("Data")
             }

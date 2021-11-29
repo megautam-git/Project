@@ -16,6 +16,10 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.project.*
+import android.os.Bundle
+
+
+
 
 
 class MyService:Service() {
@@ -54,10 +58,14 @@ class MyService:Service() {
         Handler(Looper.getMainLooper()).postDelayed(
             Runnable {
                 val broadcastIntent = Intent()
-                broadcastIntent.action = "com.example.project.string"
+               // broadcastIntent.action = "com.example.project.string"
+                broadcastIntent.action="custom-action-local-broadcast"
                 broadcastIntent.putExtra("Data", "service stopped")
-                sendBroadcast(broadcastIntent)
-
+              //  sendBroadcast(broadcastIntent)
+                LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent)
+                /*val extras: Bundle = sbn.getNotification().extras
+                text = extras.getCharSequence("android.text").toString()
+                title = extras.getString("android.title")*/
               /*  intent?.putExtra("broadcastMessage", "echoMessage")?.let {
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(
                         it
